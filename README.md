@@ -1,73 +1,793 @@
-# Customer Trends Data Analysis — Resume-Ready Project
+# Customer Trends Data Analysis — Python, SQL & Power BI
 
-This repository contains an end-to-end data analysis portfolio project demonstrating data cleaning, exploratory analysis, SQL-based analytics, and interactive reporting with Power BI. It's written and organized to be résumé-friendly: clear goals, reproducible steps, and copy-ready bullets you can paste into a CV.
+<p align="center">
+  <strong>End-to-end customer behavior analytics project focused on turning transactional data into clear, decision-oriented business insights.</strong>
+</p>
 
-**Tech stack:** Python (pandas, numpy), SQL (MySQL/Postgres/MS SQL compatible), Power BI, Jupyter Notebook
-
-**Data:** `customer_shopping_behavior.csv` — simulated retail/customer transactional and demographic data used for analysis and modeling.
-
-**One-line summary:** Performed end-to-end customer behavior analysis to identify high-value segments, purchase drivers, and actionable retention strategies using Python, SQL, and Power BI.
-
-**What I did (high level):**
-
-- **Data engineering:** cleaned and normalized transaction and customer records; handled missing values and data types for downstream analysis.
-- **Exploratory analysis:** computed cohort, frequency, recency, and monetary metrics; created segmentations and churn indicators.
-- **SQL analytics:** implemented business questions as parameterized SQL queries in `customer_behavior_sql_queries.sql` to support reproducible reporting.
-- **Visualization & reporting:** built an interactive Power BI dashboard (source file included if present) to surface trends and KPIs for stakeholders.
-- **Insights & recommendations:** distilled technical results into business recommendations aimed at increasing retention and average order value.
-
-**Quick start**
-
-1. Clone the repo and open the notebook:
-
-```powershell
-git clone <your-fork-or-local-path>
-cd customer-trends-data-analysis-SQL-Python-PowerBI
-```
-
-2. Open `Customer_Shopping_Behavior_Analysis.ipynb` in Jupyter or VS Code to run the analysis end-to-end.
-3. (Optional) Load data into a SQL database if you want to run the SQL queries:
-    - Create a database in MySQL/Postgres/MS SQL
-    - Run the Python notebook cells that push the `customer_shopping_behavior.csv` data into the database
-    - Open and run queries in `customer_behavior_sql_queries.sql`
-4. Open the Power BI file (if included) or connect Power BI to your SQL database to reproduce the dashboard visuals.
-
-**Files of interest**
-
-- `Customer_Shopping_Behavior_Analysis.ipynb`: main analysis notebook (data cleaning, EDA, SQL connectivity)
-- `customer_behavior_sql_queries.sql`: organized SQL queries answering business questions
-- `customer_shopping_behavior.csv`: dataset used in the analysis
-
-**How to reproduce locally (conda / venv)**
-
-1. Create environment and install dependencies:
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt  # or install pandas, numpy, sqlalchemy, jupyterlab
-```
-
-2. Launch Jupyter:
-
-```bash
-jupyter lab
-```
-
-If you want, I can create a `requirements.txt` with the minimal packages.
-
-**Résumé-ready bullets (copy these directly into your CV)**
-
-- Performed end-to-end customer behavior analysis using Python and SQL to identify high-value customer segments and key purchase drivers, enabling targeted retention strategies.
-- Built parameterized SQL queries and an interactive Power BI dashboard to surface actionable KPIs for stakeholders, improving decision-making speed.
-- Cleaned and transformed a transactional customer dataset to support cohort and RFM analyses, producing data used across cross-functional reporting.
-
-**Notes & next steps**
-
-- If you'd like, I can add a `requirements.txt`, a short `CONTRIBUTING.md`, or a one-page PDF project summary tailored for your resume.
-
-**License**
-MIT
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-Data%20Analysis-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/SQL-Analytics-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="SQL">
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" alt="Power BI">
+  <img src="https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter">
+</p>
 
 ---
 
+## 📌 Project Overview
+
+This project analyzes **3,900 customer purchase records** to understand purchasing patterns across demographics, products, discounts, shipping preferences, subscription status, and customer purchase history.
+
+The project follows a practical analytics workflow:
+
+**Business Problem → Data Understanding → Data Cleaning → Feature Preparation → KPI Analysis → SQL Analysis → Dashboard → Business Insights**
+
+The objective is to demonstrate how raw customer data can be transformed into structured analysis and business-facing reporting using **Python, SQL, and Power BI**.
+
+> **Focus:** practical descriptive and diagnostic analytics, not predictive machine learning.
+
+---
+
+## 🎯 Business Problem
+
+A retail business wants to better understand customer shopping behavior in order to improve sales, customer engagement, customer satisfaction, and long-term loyalty.
+
+The analysis investigates questions such as:
+
+- How much revenue is generated by different customer groups?
+- Which product categories contribute the most revenue?
+- Which products generate the most revenue?
+- How do subscribers and non-subscribers compare?
+- Which customers use discounts while still making relatively high-value purchases?
+- How do Standard and Express shipping customers differ in average purchase amount?
+- How are customers distributed across purchase-history segments?
+- Which products perform strongly within each category?
+- How does revenue vary across age groups?
+
+---
+
+## 📊 Dataset
+
+The dataset contains **3,900 purchase records** and **18 original columns** covering customer demographics, purchase information, product attributes, and shopping behavior.
+
+### Main data areas
+
+| Area | Examples |
+|---|---|
+| Customer | Customer ID, Age, Gender, Location |
+| Purchase | Item Purchased, Category, Purchase Amount |
+| Product | Size, Color, Season, Review Rating |
+| Behavior | Previous Purchases, Frequency of Purchases |
+| Promotion | Discount Applied, Promo Code Used |
+| Subscription | Subscription Status |
+| Fulfillment | Shipping Type |
+
+The raw dataset contains **37 missing values in Review Rating**. These are handled during the data-cleaning stage.
+
+> The dataset is used as a simulated retail/customer shopping dataset for analytical practice.
+
+---
+
+# 🔄 Analytical Workflow
+
+~~~text
+                         ┌─────────────────────┐
+                         │   Raw CSV Dataset   │
+                         │   3,900 records     │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │ Data Understanding  │
+                         │ • Structure         │
+                         │ • Statistics        │
+                         │ • Missing values    │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │ Data Cleaning       │
+                         │ • Missing values    │
+                         │ • Column names      │
+                         │ • Consistency       │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │ Feature Preparation │
+                         │ • Age groups        │
+                         │ • Frequency days    │
+                         └──────────┬──────────┘
+                                    │
+                      ┌─────────────┴─────────────┐
+                      ▼                           ▼
+             ┌─────────────────┐         ┌─────────────────┐
+             │ Python Analysis │         │ SQL Analytics   │
+             │ • KPIs          │         │ • 10 questions  │
+             │ • EDA           │         │ • Aggregations  │
+             │ • Comparisons   │         │ • CTEs          │
+             └────────┬────────┘         │ • Window funcs  │
+                      │                  └────────┬────────┘
+                      └────────────┬─────────────┘
+                                   ▼
+                         ┌─────────────────────┐
+                         │ Business Insights   │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │   Power BI Report   │
+                         │ KPIs + Visuals      │
+                         └─────────────────────┘
+~~~
+
+---
+
+# 🛠️ Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| **Python** | Data preparation and analysis |
+| **Pandas** | Data manipulation and transformation |
+| **NumPy** | Numerical operations |
+| **Jupyter Notebook** | Reproducible analysis |
+| **SQL** | Business-question analysis |
+| **PostgreSQL** | Relational database analysis |
+| **MySQL** | Relational database connectivity |
+| **SQLAlchemy** | Python-to-database connectivity |
+| **Power BI** | Interactive reporting |
+| **Git/GitHub** | Version control and delivery |
+
+---
+
+# 🧹 Data Preparation
+
+The Python notebook performs the following steps.
+
+### 1. Load and inspect the dataset
+
+The CSV is loaded using Pandas and examined using:
+
+- DataFrame structure
+- Data types
+- Summary statistics
+- Missing-value checks
+- Column inspection
+
+### 2. Handle missing review ratings
+
+Missing values in **Review Rating** are imputed using the **median review rating within the corresponding product category**.
+
+This preserves category-level differences rather than replacing all missing ratings with one global value.
+
+### 3. Standardize column names
+
+Column names are converted to snake_case for consistency.
+
+~~~text
+Purchase Amount (USD)
+        ↓
+purchase_amount
+~~~
+
+### 4. Create customer age groups
+
+Customer ages are divided into four quartile-based groups:
+
+- Young Adult
+- Adult
+- Middle-aged
+- Senior
+
+### 5. Convert purchase frequency to numeric days
+
+Purchase-frequency categories are mapped to approximate day intervals:
+
+| Frequency | Days |
+|---|---:|
+| Weekly | 7 |
+| Fortnightly | 14 |
+| Bi-Weekly | 14 |
+| Monthly | 30 |
+| Quarterly | 90 |
+| Every 3 Months | 90 |
+| Annually | 365 |
+
+### 6. Check redundant fields
+
+Discount and promo-code fields are compared for consistency. For this dataset, the fields are redundant for the analysis, so **promo_code_used** is removed from the cleaned DataFrame.
+
+---
+
+# 📈 Core Business KPIs
+
+The analysis calculates core business metrics including:
+
+- Total revenue
+- Average purchase amount
+- Total transactions
+- Revenue by product category
+- Revenue by subscription status
+- Revenue by gender
+- Top products by revenue
+
+### Current dataset-level results
+
+| KPI | Result |
+|---|---:|
+| Total transactions | **3,900** |
+| Total revenue | **$233,081** |
+| Average purchase amount | **$59.76** |
+| Missing review ratings before cleaning | **37** |
+
+---
+
+# 🧮 SQL Business Analysis
+
+The SQL analysis contains **10 business questions** covering practical retail analytics scenarios.
+
+| # | Business Question | SQL Concepts |
+|---|---|---|
+| 1 | Revenue by gender | GROUP BY, SUM |
+| 2 | Discount users spending above average | Subquery, AVG |
+| 3 | Top 5 products by average rating | AVG, GROUP BY, ORDER BY |
+| 4 | Standard vs Express shipping spend | Filtering, aggregation |
+| 5 | Subscriber vs non-subscriber performance | COUNT, AVG, SUM |
+| 6 | Products with the highest discount rate | CASE, aggregation |
+| 7 | New / Returning / Loyal segmentation | CASE, CTE |
+| 8 | Top 3 products within each category | CTE, ROW_NUMBER |
+| 9 | Repeat buyers and subscription status | Filtering, grouping |
+| 10 | Revenue by age group | GROUP BY, aggregation |
+
+### SQL techniques demonstrated
+
+- Aggregation
+- Filtering
+- GROUP BY
+- ORDER BY
+- Subqueries
+- CASE expressions
+- Common Table Expressions
+- Conditional aggregation
+- Window functions
+- Ranking within groups
+
+The SQL file uses **PostgreSQL syntax** for parts of the analysis, including PostgreSQL casting and LIMIT syntax.
+
+---
+
+# 🔍 Key Analysis Areas
+
+## Customer Segmentation
+
+Customers are grouped using previous purchase history:
+
+~~~text
+Previous Purchases = 1
+        ↓
+      New
+
+Previous Purchases = 2–10
+        ↓
+   Returning
+
+Previous Purchases > 10
+        ↓
+      Loyal
+~~~
+
+This allows customer purchase history to be compared with other attributes such as subscription status.
+
+---
+
+## Product Performance
+
+Product-level analysis identifies:
+
+- Highest-revenue products
+- Highest-rated products
+- Most-purchased products within categories
+- Products with high discount usage
+
+This provides a product-level view of customer demand and purchasing behavior.
+
+---
+
+## Subscription Analysis
+
+Subscriber and non-subscriber groups are compared using:
+
+- Customer count
+- Average purchase amount
+- Total revenue
+
+The purpose is to identify differences in observed purchasing behavior between the two groups.
+
+---
+
+## Discount Analysis
+
+The analysis examines customers who used discounts while still spending at or above the overall average purchase amount.
+
+It also calculates the percentage of purchases receiving discounts for individual products.
+
+---
+
+## Shipping Analysis
+
+Standard and Express shipping customers are compared using average purchase amount to investigate whether fulfillment preference is associated with different transaction values.
+
+---
+
+## Demographic Analysis
+
+Revenue is examined across:
+
+- Gender
+- Age groups
+
+This provides a descriptive demographic view of purchasing behavior.
+
+---
+
+# 📊 Power BI Dashboard
+
+The repository includes the Power BI dashboard:
+
+**customer_behavior_dashboard.pbix**
+
+The dashboard provides a business-facing view of the analysis and is designed around customer behavior, revenue, product performance, subscription behavior, shipping preferences, segmentation, and demographic patterns.
+
+The repository also includes the supporting report and presentation.
+
+> **Power BI Desktop on Windows is required to open the .pbix file.**
+
+---
+
+# 📁 Repository Structure
+
+~~~text
+customer-trends-data-analysis-SQL-Python-PowerBI/
+│
+├── 📊 customer_shopping_behavior.csv
+│
+├── 🐍 Customer_Shopping_Behavior_Analysis.ipynb
+│
+├── 🗄️ customer_behavior_sql_queries.sql
+│
+├── 📈 customer_behavior_dashboard.pbix
+│
+├── 📄 Business Problem Document.pdf
+│
+├── 📄 Customer Shopping Behavior Analysis.pdf
+│
+├── 🎞️ Customer-Shopping-Behavior-Analysis.pptx
+│
+├── 📘 README.md
+│
+├── ⚖️ LICENSE
+│
+└── 🚫 .gitignore
+~~~
+
+### File guide
+
+| File | Purpose |
+|---|---|
+| **customer_shopping_behavior.csv** | Raw dataset |
+| **Customer_Shopping_Behavior_Analysis.ipynb** | Python preparation, EDA, KPI analysis and database connectivity |
+| **customer_behavior_sql_queries.sql** | SQL business questions |
+| **customer_behavior_dashboard.pbix** | Power BI dashboard |
+| **Business Problem Document.pdf** | Business problem and project deliverables |
+| **Customer Shopping Behavior Analysis.pdf** | Detailed project report |
+| **Customer-Shopping-Behavior-Analysis.pptx** | Project presentation |
+| **README.md** | Project documentation |
+| **LICENSE** | MIT license |
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone the repository
+
+~~~bash
+git clone https://github.com/hetram1/customer-trends-data-analysis-SQL-Python-PowerBI.git
+cd customer-trends-data-analysis-SQL-Python-PowerBI
+~~~
+
+## 2. Create a virtual environment
+
+### Linux / WSL
+
+~~~bash
+python3 -m venv .venv
+source .venv/bin/activate
+~~~
+
+### Windows
+
+~~~powershell
+python -m venv .venv
+.venv\Scripts\activate
+~~~
+
+## 3. Install Python dependencies
+
+~~~bash
+pip install pandas numpy sqlalchemy jupyter
+~~~
+
+For PostgreSQL:
+
+~~~bash
+pip install psycopg2-binary
+~~~
+
+For MySQL:
+
+~~~bash
+pip install pymysql
+~~~
+
+## 4. Launch Jupyter
+
+~~~bash
+jupyter notebook
+~~~
+
+Open:
+
+**Customer_Shopping_Behavior_Analysis.ipynb**
+
+---
+
+# ▶️ Recommended Notebook Execution Order
+
+Run the notebook from the top:
+
+~~~text
+1. Load dataset
+        ↓
+2. Inspect dataset
+        ↓
+3. Check missing values
+        ↓
+4. Impute missing Review Rating
+        ↓
+5. Standardize column names
+        ↓
+6. Create age groups
+        ↓
+7. Create purchase-frequency feature
+        ↓
+8. Check redundant fields
+        ↓
+9. Remove redundant field
+        ↓
+10. Run Business KPI Analysis
+        ↓
+11. Connect to database
+        ↓
+12. Load cleaned DataFrame
+~~~
+
+Running cells sequentially ensures that the cleaned **df** DataFrame exists before database-loading cells are executed.
+
+---
+
+# 🗄️ Database Setup
+
+The notebook contains database-loading sections for PostgreSQL and MySQL.
+
+## PostgreSQL
+
+Create the database:
+
+~~~sql
+CREATE DATABASE customer_behavior;
+~~~
+
+The notebook then loads the cleaned DataFrame into a table named:
+
+~~~text
+customer
+~~~
+
+The SQL analysis can be executed against this table.
+
+### PostgreSQL connection
+
+Configure the notebook with your own local credentials. Do **not** commit real passwords to GitHub.
+
+---
+
+## MySQL
+
+Create the database:
+
+~~~sql
+CREATE DATABASE customer_behavior;
+~~~
+
+A dedicated project user can be created instead of using the root account:
+
+~~~sql
+CREATE USER 'customer_user'@'localhost' IDENTIFIED BY '<your_password>';
+
+GRANT ALL PRIVILEGES
+ON customer_behavior.*
+TO 'customer_user'@'localhost';
+
+FLUSH PRIVILEGES;
+~~~
+
+The cleaned DataFrame can then be loaded into the **customer** table.
+
+---
+
+## SQL Server
+
+The repository also contains a SQL Server connection template using:
+
+**ODBC Driver 17 for SQL Server**
+
+A running SQL Server instance is required for this section. It is not required for the main Python + PostgreSQL/MySQL workflow.
+
+---
+
+# 💡 From Data to Decision
+
+The central idea of this project is simple:
+
+~~~text
+Business Question
+       ↓
+Data
+       ↓
+Clean & Transform
+       ↓
+Calculate KPIs
+       ↓
+Ask Business Questions with SQL
+       ↓
+Compare Segments / Products
+       ↓
+Visualize in Power BI
+       ↓
+Interpret the Results
+~~~
+
+The project therefore treats Python, SQL, and Power BI as connected parts of one analytical workflow rather than as separate tools.
+
+---
+
+# 📌 Example Business Questions
+
+### Revenue
+
+- Which demographic groups generate the most revenue?
+- Which product categories contribute the most revenue?
+- Which products generate the highest revenue?
+
+### Customers
+
+- How many customers are subscribers?
+- How does subscriber behavior compare with non-subscribers?
+- How are customers distributed by previous purchase history?
+
+### Promotions
+
+- Which customers use discounts while maintaining relatively high purchase amounts?
+- Which products have the highest discount rates?
+
+### Products
+
+- Which products receive the highest review ratings?
+- Which products are purchased most frequently within each category?
+
+### Operations
+
+- Do Standard and Express shipping customers have different average purchase amounts?
+
+### Demographics
+
+- How does revenue vary across age groups and gender?
+
+---
+
+# 📈 Observed Dataset Patterns
+
+The current analysis shows:
+
+- **3,900** total purchase records.
+- Approximately **$233K** in total purchase revenue.
+- An average purchase amount of approximately **$59.76**.
+- **37** missing review ratings before imputation.
+- Clothing is the largest category by transaction count and total revenue in this dataset.
+- The dataset supports direct comparison of subscribers and non-subscribers.
+- Product-level analysis can identify high-revenue, highly rated, and frequently purchased products.
+
+> These are descriptive observations from the supplied dataset. They should not be interpreted as causal relationships or as representative of a real retail population.
+
+---
+
+# 🧠 Skills Demonstrated
+
+## Data Analysis
+
+- Data loading
+- Data inspection
+- Missing-value analysis
+- Data cleaning
+- Data transformation
+- Feature creation
+- KPI calculation
+- Grouped analysis
+- Comparative analysis
+
+## SQL
+
+- SELECT
+- WHERE
+- GROUP BY
+- ORDER BY
+- Aggregate functions
+- Subqueries
+- CASE expressions
+- CTEs
+- Conditional aggregation
+- Window functions
+- Ranking
+
+## Business Analytics
+
+- Translating business questions into analytical queries
+- Customer segmentation
+- Product analysis
+- Revenue analysis
+- Promotion analysis
+- Subscription analysis
+- Communicating results for business users
+
+## Business Intelligence
+
+- KPI-oriented reporting
+- Interactive Power BI dashboards
+- Business-focused visualization
+- Analytical storytelling
+
+---
+
+# ⚠️ Scope & Limitations
+
+This project intentionally focuses on **descriptive and diagnostic analytics**.
+
+It does not claim to implement:
+
+- Predictive churn modeling
+- Customer lifetime value modeling
+- Causal inference
+- A/B testing
+- Production machine learning
+- Real-time analytics
+
+The dataset is simulated, so findings are specific to the provided data and should not automatically be generalized to a real retail business.
+
+---
+
+# 🔐 Security
+
+Never commit real database credentials, API keys, passwords, or tokens to a public repository.
+
+Use environment variables or a local configuration file such as **.env**, and keep it excluded through **.gitignore**.
+
+Example:
+
+~~~text
+DB_USER=your_user
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=5434
+DB_NAME=customer_behavior
+~~~
+
+---
+
+# 🔮 Possible Future Improvements
+
+The current project intentionally remains focused on core analytics. Possible extensions include:
+
+- Automated data-quality checks
+- More detailed cohort analysis
+- Customer lifetime value analysis
+- Repeat-purchase analysis over time
+- Time-series revenue analysis when transaction dates are available
+- Automated dashboard refresh
+- Additional Power BI drill-downs
+- Statistical testing between customer groups
+
+These are potential extensions, not features currently claimed by the project.
+
+---
+
+# 📄 Complete Deliverables
+
+~~~text
+Business Problem
+       │
+       ├── Business Problem Document
+       │
+       ▼
+Data Preparation
+       │
+       ├── Python / Pandas
+       │
+       ▼
+Data Analysis
+       │
+       ├── Python KPIs
+       └── SQL Queries
+       │
+       ▼
+Visualization
+       │
+       └── Power BI Dashboard
+       │
+       ▼
+Communication
+       │
+       ├── PDF Report
+       └── Presentation
+~~~
+
+Everything needed to understand the project is included in the repository.
+
+---
+
+# 🧾 Resume Version
+
+### Project
+
+**Customer Trends Data Analysis | Python, SQL, Power BI**
+
+### Short description
+
+Analyzed **3,900 retail purchase records** using Python and SQL to clean data, engineer customer features, calculate business KPIs, analyze customer and product behavior, and present findings through an interactive Power BI dashboard.
+
+### Interview explanation
+
+> “I built an end-to-end customer behavior analytics project starting from a raw retail dataset. I used Pandas for data cleaning and feature preparation, loaded the cleaned data into a relational database, translated practical business questions into SQL queries, and used Power BI to communicate the resulting KPIs and patterns. The main goal was to connect technical analysis with business questions and decision-making.”
+
+---
+
+# 📚 Project Documentation
+
+| Resource | Description |
+|---|---|
+| **Business Problem Document.pdf** | Original business problem and required deliverables |
+| **Customer Shopping Behavior Analysis.pdf** | Detailed project report |
+| **Customer-Shopping-Behavior-Analysis.pptx** | Presentation of the analysis |
+| **Customer_Shopping_Behavior_Analysis.ipynb** | Complete Python workflow |
+| **customer_behavior_sql_queries.sql** | SQL business analysis |
+| **customer_behavior_dashboard.pbix** | Power BI dashboard |
+
+---
+
+## 👤 Author
+
+**Hetram Gugrwal**
+
+GitHub: **[@hetram1](https://github.com/hetram1)**
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+---
+
+<p align="center">
+  <strong>Python • SQL • PostgreSQL • MySQL • Power BI • Business Analytics</strong>
+</p>
